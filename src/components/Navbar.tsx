@@ -17,16 +17,16 @@ const Navbar = (props: Props) => {
 					background: 
 						"linear-gradient(to top, #000000, rgba(0,0,0,0))",
 				}}>
-				<Link href='/home' className='font-semibold text-xl pl-10'>
+				<Link href='/' className='font-semibold text-xl pl-10'>
 					Midi-Air
 				</Link>
 				<div className='mx-auto flex justify-center space-x-12 text-lg font-normal text-[#F4F5F7] hover:text-white'>
-					<Link href='/home'>Home</Link>
+					<Link href='/'>Home</Link>
 					<Link href='/play-together'>Play Together</Link>
 					<Link href='/air-piano'>Freeplay</Link>
 				</div>
 				<div className="mr-8">
-					<Button text='Try it'></Button>
+					<Link href='/air-piano'><Button text='Try it'></Button></Link>
 				</div>
 			</div>
 		</nav>
