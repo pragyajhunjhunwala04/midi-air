@@ -110,7 +110,7 @@ export default function AirPiano() {
 				<video
 					id='video'
 					ref={videoRef}
-					className='w-[640px] h-[480px] rounded-lg border border-gray-300'
+					className='w-[640px] h-[480px] rounded-lg border border-gray-300 scale-x-[-1]'
 					muted
 					playsInline
 				/>

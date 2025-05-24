@@ -21,14 +21,17 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${commissioner.variable} antialiased flex flex-col border min-h-screen`}
+				className={`${commissioner.variable} antialiased flex flex-col min-h-screen`}
 			>
 				<Navbar />
 				<div className='flex-1 mt-1/5'>{children}</div>
-				<footer className='row-start-3 flex gap-6 flex-wrap items-center justify-center w-screen h-[100px] mr-10' style={{
-							background:
-								"linear-gradient(to left, #EBA392, #E67E6F, #781542,#481A63, #00758A)",
-						}}>
+				<footer
+					className='row-start-3 flex gap-6 flex-wrap items-center justify-center w-screen h-[100px] mr-10'
+					style={{
+						background:
+							"linear-gradient(to left, #EBA392, #E67E6F, #781542,#481A63, #00758A)",
+					}}
+				>
 					<div
 						className='static w-screen h-[100px]'
 						style={{
