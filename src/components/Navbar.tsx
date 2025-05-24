@@ -1,10 +1,14 @@
+'use client';
 import Link from "next/link";
 import Button from "../components/Button";
 import React from "react";
+import clsx from 'clsx';
+import { usePathname } from 'next/navigation';
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+	const pathname = usePathname();
 	return (
 		<nav
 			className='w-full shadow-md'
@@ -20,10 +24,19 @@ const Navbar = (props: Props) => {
 				<Link href='/' className='font-semibold text-xl pl-10'>
 					Midi-Air
 				</Link>
-				<div className='mx-auto flex justify-center space-x-12 text-lg font-normal text-[#F4F5F7] hover:text-white'>
-					<Link href='/'>Home</Link>
-					<Link href='/play-together'>Play Together</Link>
-					<Link href='/air-piano'>Freeplay</Link>
+				<div className='mx-auto flex justify-center space-x-12'>
+					<Link className={clsx(
+						'text-lg font-normal  text-[#F4F5F7] text-opacity-50hover:text-white',
+						pathname === '/' ? 'font-medium text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
+						)} href='/'>Home</Link>
+						<Link className={clsx(
+						'text-lg font-normal  text-[#F4F5F7] text-opacity-50 hover:text-white',
+						pathname === '/play-together' ? 'font-medium text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
+						)} href='/play-together'>Play Together</Link>
+						<Link className={clsx(
+						'text-lg font-normal  text-[#F4F5F7] text-opacity-50 hover:text-white',
+						pathname === '/air-piano' ? 'font-medium text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
+						)} href='/air-piano'>Freeplay</Link>
 				</div>
 				<div className="mr-8">
 					<Link href='/air-piano'><Button text='Try it'></Button></Link>

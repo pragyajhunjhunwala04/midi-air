@@ -7,12 +7,17 @@ import {
 	GestureRecognizerResult,
 } from "@mediapipe/tasks-vision";
 
+import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
+import 'react-piano/dist/styles.css';
+
 export default function AirPiano() {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const [gestureRecognizer, setGestureRecognizer] =
 		useState<GestureRecognizer | null>(null);
 	const [gestureResult, setGestureResult] =
 		useState<GestureRecognizerResult | null>(null);
+	const firstNote = MidiNumbers.fromNote('c1'); // MIDI number for C3
+	const lastNote = MidiNumbers.fromNote('c5');  // MIDI number for F5
 
 	useEffect(() => {
 		let animationFrameId: number;
@@ -84,7 +89,23 @@ export default function AirPiano() {
 	}, []);
 
 	return (
-		<div className='flex flex-col items-center p-4'>
+		<div className="flex flex-col items-center m-auto">
+			<div className='flex flex-3'>
+				<div className="h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75">
+					<h2 className='text-lg font-semibold mb-2'>
+						Currently Playing:
+					</h2>
+					{gestureResult?.gestures.length ? (
+						gestureResult.gestures[0].map((g) => (
+							<div key={g.categoryName} className='mb-1'>
+								<strong>{g.categoryName}</strong> - Confidence:{" "}
+								{(g.score * 100).toFixed(1)}%
+							</div>
+						))
+					) : (
+						<p>Not playing any Chords.</p>
+					)}
+				</div>
 			<video
 				id='video'
 				ref={videoRef}
@@ -92,20 +113,30 @@ export default function AirPiano() {
 				muted
 				playsInline
 			/>
-			<div className='mt-4 p-4 w-[640px] bg-gray-800 text-white rounded-lg'>
-				<h2 className='text-xl font-semibold mb-2'>
-					Detected Gestures:
-				</h2>
-				{gestureResult?.gestures.length ? (
-					gestureResult.gestures[0].map((g) => (
-						<div key={g.categoryName} className='mb-1'>
-							<strong>{g.categoryName}</strong> - Confidence:{" "}
-							{(g.score * 100).toFixed(1)}%
-						</div>
-					))
-				) : (
-					<p>No gestures detected.</p>
-				)}
+				<div className="h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75">
+					<h2 className='text-lg font-semibold mb-2'>
+						Detected Gestures:
+					</h2>
+					{gestureResult?.gestures.length ? (
+						gestureResult.gestures[0].map((g) => (
+							<div key={g.categoryName} className='mb-1'>
+								<strong>{g.categoryName}</strong> - Confidence:{" "}
+								{(g.score * 100).toFixed(1)}%
+							</div>
+						))
+					) : (
+						<p>No gestures detected.</p>
+					)}
+				</div>
+			</div>
+			<div className='mt-4 p-4 w-[1200px] text-white rounded-xl justify center'>
+				<Piano
+					noteRange={{ first: firstNote, last: lastNote }}
+					// playNote={playNote}
+					stopNote={() => {}}
+					width={1100}
+					className="ml-8"
+				/>
 			</div>
 		</div>
 	);
