@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {};
 
-const AirPiano = (props: Props) => {
+const AirPiano = async (props: Props) => {
 	return <div>AirPiano</div>;
 };
 
