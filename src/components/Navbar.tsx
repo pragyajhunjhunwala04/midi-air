@@ -13,21 +13,23 @@ const Navbar = (props: Props) => {
 					"linear-gradient(to right, #EBA392, #E67E6F, #781542,#481A63, #00758A)",
 			}}
 		>
-			<div className='max-w-screen relative z-10 font-commissioner flex justify-between'>
+			<div className='max-w-screen relative z-10 font-commissioner flex justify-between z-10'>
 				<Link href='/home' className='font-semibold text-xl pl-10'>
 					Midi-Air
 				</Link>
-				<div className='mx-auto flex justify-center space-x-12 text-lg font-medium text-white'>
+				<div className='mx-auto flex justify-center space-x-12 text-lg font-normal text-[#F4F5F7] hover:text-white'>
 					<Link href='/home'>Home</Link>
-					<Link href='/about'>About Us</Link>
-					<Link href='/air-piano'>Air Piano</Link>
+					<Link href='/play-together'>Play Together</Link>
+					<Link href='/air-piano'>Freeplay</Link>
 				</div>
-				<Button text='Try it'></Button>
+				<div className="mr-8">
+					<Button text='Try it'></Button>
+				</div>
 			</div>
 
 			{/* Commented out the original gradient because it was causing layout problems with the child elements */}
 
-			{/* <div
+			<div
 				className='absolute left-0 top-0 w-screen h-[140px] z-0'
 				style={{
 					background:
@@ -40,7 +42,7 @@ const Navbar = (props: Props) => {
 					background:
 						"linear-gradient(to top, #000000, rgba(0,0,0,0))",
 				}}
-			/> */}
+			/>
 		</nav>
 	);
 };
