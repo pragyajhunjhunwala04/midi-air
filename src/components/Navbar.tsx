@@ -25,18 +25,24 @@ const Navbar = (props: Props) => {
 					Midi-Air
 				</Link>
 				<div className='mx-auto flex justify-center space-x-12'>
-					<Link className={clsx(
-						'text-lg font-normal  text-[#F4F5F7] text-opacity-50hover:text-white',
-						pathname === '/' ? 'font-medium text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
+					<span className="relative inline-block h-fit cursor-pointer after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-white after:transition-transform after:duration-300 hover:after:scale-x-100">
+						<Link className={clsx(
+						'text-lg font-normal  text-[#F4F5F7] text-opacity-50hover:text-white ',
+						pathname === '/' ? 'font-medium underline underline-offset-4 text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
 						)} href='/'>Home</Link>
+					</span>
+					<span className="relative inline-block h-fit cursor-pointer after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-white after:transition-transform after:duration-300 hover:after:scale-x-100">
 						<Link className={clsx(
 						'text-lg font-normal  text-[#F4F5F7] text-opacity-50 hover:text-white',
-						pathname === '/play-together' ? 'font-medium text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
+						pathname === '/play-together' ? 'font-medium underline underline-offset-4 text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
 						)} href='/play-together'>Play Together</Link>
+					</span>
+					<span className="relative inline-block h-fit cursor-pointer after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-white after:transition-transform after:duration-300 hover:after:scale-x-100">
 						<Link className={clsx(
 						'text-lg font-normal  text-[#F4F5F7] text-opacity-50 hover:text-white',
-						pathname === '/air-piano' ? 'font-medium text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
+						pathname === '/air-piano' ? 'font-medium underline underline-offset-4 text-opacity-100' : 'font-normal text-[#F4F5F7] text-opacity-50 hover:text-white'
 						)} href='/air-piano'>Freeplay</Link>
+					</span>
 				</div>
 				<div className="mr-8">
 					<Link href='/air-piano'><Button text='Try it'></Button></Link>
