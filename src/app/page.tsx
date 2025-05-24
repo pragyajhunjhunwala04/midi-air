@@ -1,15 +1,22 @@
+'use client';
 import GradientNotes from '@/components/GradientNotes';
 import React from 'react';
 import Button from "../components/Button";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from 'framer-motion';
 
 type Props = {};
 
 const Home = (props: Props) => {
 	return (
 	<div>
-		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+		<motion.div
+		initial={{ opacity: 0, y: 30 }}
+		whileInView={{ opacity: 1, y: 0 }}
+		transition={{ duration: 0.6, ease: 'easeOut' }}
+		viewport={{ once: true, amount: 0.2 }} 
+		className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 			<div className="max-w-xl mx-auto py-16 justify-center text-center">
 				<h2 className="text-md font-normal">Welcome to</h2>
 				<h1 className="text-5xl font-medium pt-4 pb-8">Midi-Air</h1>
@@ -19,8 +26,12 @@ const Home = (props: Props) => {
 					</Link>
 				</div>
 			</div>
-		</div>
-		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+		</motion.div>
+		<motion.div
+		initial={{ opacity: 0, y: 30 }}
+		whileInView={{ opacity: 1, y: 0 }}
+		transition={{ duration: 0.6, ease: 'easeOut' }}
+		viewport={{ once: true, amount: 0.2 }}  className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 			<div className="max-w-4xl mx-auto flex">
 				<div className="w-1/2 m-4 overflow-clip">
 					<Image
@@ -36,9 +47,13 @@ const Home = (props: Props) => {
 					<p className="text-white text-opacity-75 text-sm">Enjoy music but don’t know how to play an instrument? Midi-Air takes a song and generates chords in the form of hand signs. Play music with just air hand motions!</p>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 
-		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 justify-center">
+		<motion.div
+		initial={{ opacity: 0, y: 30 }}
+		whileInView={{ opacity: 1, y: 0 }}
+		transition={{ duration: 0.6, ease: 'easeOut' }}
+		viewport={{ once: true, amount: 0.2 }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 justify-center">
 			<h2 className="text-xl font-medium pt-4 pb-8 text-center">How to Play</h2>
 			<Image
 						src="images/hands-asl-interpreting-solid.svg"
@@ -65,7 +80,7 @@ const Home = (props: Props) => {
 					</span>
 				</p>
 			</div>
-		</div>
+		</motion.div>
 		<GradientNotes/>
 	</div>
 

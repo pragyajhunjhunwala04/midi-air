@@ -1,9 +1,10 @@
 import React from 'react';
+import SelectSong from '@/components/SelectSong';
 
 type Props = {};
 
-const About = (props: Props) => {
-	return <div>Play Together</div>;
+const PlayTogether = (props: Props) => {
+	return <div><SelectSong/></div>;
 };
 
-export default About;
+export default PlayTogether;
