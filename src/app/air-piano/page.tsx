@@ -7,8 +7,8 @@ import {
 	GestureRecognizerResult,
 } from "@mediapipe/tasks-vision";
 
-import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
-import 'react-piano/dist/styles.css';
+import { Piano, KeyboardShortcuts, MidiNumbers } from "react-piano";
+import "react-piano/dist/styles.css";
 
 export default function AirPiano() {
 	const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,8 +16,8 @@ export default function AirPiano() {
 		useState<GestureRecognizer | null>(null);
 	const [gestureResult, setGestureResult] =
 		useState<GestureRecognizerResult | null>(null);
-	const firstNote = MidiNumbers.fromNote('c1'); // MIDI number for C3
-	const lastNote = MidiNumbers.fromNote('c5');  // MIDI number for F5
+	const firstNote = MidiNumbers.fromNote("c1"); // MIDI number for C3
+	const lastNote = MidiNumbers.fromNote("c5"); // MIDI number for F5
 
 	useEffect(() => {
 		let animationFrameId: number;
@@ -35,7 +35,8 @@ export default function AirPiano() {
 				{
 					baseOptions: {
 						modelAssetPath:
-							"https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task",
+							// "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task",
+							"./asl_gesture_recognizer.task",
 					},
 					numHands: 2,
 				}
@@ -57,12 +58,12 @@ export default function AirPiano() {
 			// Render loop for gesture detection
 			function renderLoop() {
 				if (!videoRef.current || !recognizer || !running) return;
-
 				if (videoRef.current.currentTime !== lastVideoTime) {
 					const result = recognizer.recognizeForVideo(
 						videoRef.current,
 						videoRef.current.currentTime
 					);
+					console.log(result.gestures.length);
 					setGestureResult(result);
 					lastVideoTime = videoRef.current.currentTime;
 				}
@@ -89,9 +90,9 @@ export default function AirPiano() {
 	}, []);
 
 	return (
-		<div className="flex flex-col items-center m-auto">
+		<div className='flex flex-col items-center m-auto'>
 			<div className='flex flex-3'>
-				<div className="h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75">
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
 					<h2 className='text-lg font-semibold mb-2'>
 						Currently Playing:
 					</h2>
@@ -106,14 +107,14 @@ export default function AirPiano() {
 						<p>Not playing any Chords.</p>
 					)}
 				</div>
-			<video
-				id='video'
-				ref={videoRef}
-				className='w-[640px] h-[480px] rounded-lg border border-gray-300'
-				muted
-				playsInline
-			/>
-				<div className="h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75">
+				<video
+					id='video'
+					ref={videoRef}
+					className='w-[640px] h-[480px] rounded-lg border border-gray-300 scale-x-[-1]'
+					muted
+					playsInline
+				/>
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
 					<h2 className='text-lg font-semibold mb-2'>
 						Detected Gestures:
 					</h2>
@@ -135,7 +136,7 @@ export default function AirPiano() {
 					// playNote={playNote}
 					stopNote={() => {}}
 					width={1100}
-					className="ml-8"
+					className='ml-8'
 				/>
 			</div>
 		</div>
