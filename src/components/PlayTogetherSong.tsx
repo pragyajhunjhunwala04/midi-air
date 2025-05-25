@@ -6,7 +6,7 @@ import {
 	GestureRecognizer,
 	GestureRecognizerResult,
 } from "@mediapipe/tasks-vision";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import "react-piano/dist/styles.css";
 import Image from "next/image";
 import { select } from "motion/react-client";
@@ -63,7 +63,6 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
 						videoRef.current,
 						videoRef.current.currentTime
 					);
-					console.log(result.gestures.length);
 					setGestureResult(result);
 					lastVideoTime = videoRef.current.currentTime;
 				}
@@ -107,16 +106,15 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
 
 	return (
 		<motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-                 className='flex flex-col items-center m-auto'>
-                  <h1 className="text-md my-4">Playing: {selectedSong}</h1>
+			initial={{ opacity: 0, y: 30 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.6, ease: "easeOut" }}
+			className='flex flex-col items-center m-auto'
+		>
+			<h1 className='text-md my-4'>Playing: {selectedSong}</h1>
 			<div className='flex flex-3'>
 				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
-					<h2 className='text-lg font-semibold mb-2'>
-						Player 1
-					</h2>
+					<h2 className='text-lg font-semibold mb-2'>Player 1</h2>
 					{gestureResult?.gestures.length ? (
 						gestureResult.gestures[0].map((g) => (
 							<div key={g.categoryName} className='mb-1 text-5xl'>
