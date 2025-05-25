@@ -13,6 +13,8 @@ const Camera = ({ onGesturesDetected }: Props) => {
 	const [gestureResult, setGestureResult] =
 		useState<SimplifiedGestures | null>(null);
 
+	const MIN_CONFIDENCE = 0.7;
+
 	useEffect(() => {
 		let animationFrameId: number;
 		let lastVideoTime = -1;
@@ -56,8 +58,19 @@ const Camera = ({ onGesturesDetected }: Props) => {
 						videoRef.current,
 						videoRef.current.currentTime
 					);
-					// console.log(result);
-					const simplified = simplifyGestures(result);
+
+					// Filter gestures by confidence
+					const filteredGestures = result.gestures.map(
+						(handGestures) =>
+							handGestures.filter(
+								(gesture) => gesture.score >= MIN_CONFIDENCE
+							)
+					);
+
+					const simplified = simplifyGestures({
+						...result,
+						gestures: filteredGestures,
+					});
 					setGestureResult(simplified);
 					lastVideoTime = videoRef.current.currentTime;
 				}
