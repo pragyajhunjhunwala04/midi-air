@@ -17,7 +17,11 @@ export function playNote(note: string, duration: string = "4n") {
 	synth.triggerAttackRelease(note, duration);
 }
 
-const gestureToOctave: any = {
+type gestureToOctaveType = {
+	[key: string]: string;
+}
+
+const gestureToOctave: gestureToOctaveType = {
 	A: "0",
 	B: "1",
 	C: "2",

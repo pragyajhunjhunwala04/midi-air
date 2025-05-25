@@ -17,6 +17,7 @@ type Props = {
 
 export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
 	const [score, setScore] = useState(0);
+	console.log(setScore);
 	useState<GestureRecognizer | null>(null);
 	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
 
@@ -33,6 +34,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
   const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
   const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
   const [count, setCount] = useState(0);
+  console.log(count);
   const [timeInterval, setTimeInterval] = useState(1);
 
 
