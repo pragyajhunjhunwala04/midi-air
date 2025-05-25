@@ -11,89 +11,41 @@ import { motion } from "framer-motion";
 import "react-piano/dist/styles.css";
 import Image from "next/image";
 import { select } from "motion/react-client";
+import Camera from "./Camera";
+import { SimplifiedGestures } from "@/utils/gestures";
 
-export default function PlayTogetherSong({selectedSong, gameScore}) {
-  const [score, setScore] = useState(0);
-	const videoRef = useRef<HTMLVideoElement>(null);
-	const [gestureRecognizer, setGestureRecognizer] =
-		useState<GestureRecognizer | null>(null);
-	const [gestureResult, setGestureResult] =
-		useState<GestureRecognizerResult | null>(null);
+export default function PlayTogetherSong({ selectedSong, gameScore }) {
+	const [score, setScore] = useState(0);
+	useState<GestureRecognizer | null>(null);
+	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
 
-	useEffect(() => {
-		let animationFrameId: number;
-		let lastVideoTime = -1;
-		let running = true;
+	const handleGestures = (gestureResult: SimplifiedGestures | null) => {
+		if (!gestureResult) return;
 
-		async function setupGestureRecognizer() {
-			// Create task for image file processing:
-			const vision = await FilesetResolver.forVisionTasks(
-				// path/to/wasm/root
-				"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-			);
-			const recognizer = await GestureRecognizer.createFromOptions(
-				vision,
-				{
-					baseOptions: {
-						modelAssetPath:
-							// "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task",
-							"./asl_gesture_recognizer.task",
-					},
-					numHands: 2,
-				}
-			);
+		setGestures(gestureResult);
 
-			await recognizer.setOptions({ runningMode: "VIDEO" });
+		// Do something with the new gestures here
+		console.log("Gestures detected:", gestureResult);
+	};
 
-			setGestureRecognizer(recognizer);
-
-			// Start webcam
-			if (videoRef.current) {
-				const stream = await navigator.mediaDevices.getUserMedia({
-					video: true,
-				});
-				videoRef.current.srcObject = stream;
-				await videoRef.current.play();
-			}
-
-			// Render loop for gesture detection
-			function renderLoop() {
-				if (!videoRef.current || !recognizer || !running) return;
-				if (videoRef.current.currentTime !== lastVideoTime) {
-					const result = recognizer.recognizeForVideo(
-						videoRef.current,
-						videoRef.current.currentTime
-					);
-					setGestureResult(result);
-					lastVideoTime = videoRef.current.currentTime;
-				}
-				animationFrameId = requestAnimationFrame(renderLoop);
-			}
-
-			renderLoop();
+	const playBacktrack = () => {
+		const audio = null;
+		switch (selectedSong) {
+			case "Love Story":
+				const audio = new Audio("/audio/love-story-notes.mp3");
+				audio.onended = () => {
+					gameScore(score);
+				};
+				audio.play();
 		}
-
-		setupGestureRecognizer();
-
-		return () => {
-			running = false;
-			if (gestureRecognizer) {
-				gestureRecognizer.close();
-			}
-			if (videoRef.current?.srcObject) {
-				(videoRef.current.srcObject as MediaStream)
-					.getTracks()
-					.forEach((track) => track.stop());
-			}
-			cancelAnimationFrame(animationFrameId);
-		};
-	}, []);
+	};
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
   const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
   const [count, setCount] = useState(0);
   const [timeInterval, setTimeInterval] = useState(1);
+	const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     let audio = null;
@@ -166,42 +118,43 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
 			<div className='flex flex-3'>
 				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
 					<h2 className='text-lg font-semibold mb-2'>Player 1</h2>
-					{gestureResult?.gestures.length ? (
-						gestureResult.gestures[0].map((g) => (
-							<div key={g.categoryName} className='mb-1 text-5xl'>
-								<strong>{g.categoryName}</strong>
-							</div>
-						))
+					{gestures ? (
+						<div className='mb-1 text-5xl'>
+							<strong>{gestures["left"]}</strong>
+						</div>
 					) : (
 						<p>No Gestures Detected</p>
 					)}
-          <div className="h-[250px] w-[150px]">
-            <Image src="/images/p1_idle.gif" alt="my gif" height={500} width={500} className="object-cover min-h-[250px] min-w-[160px]"/>
-          </div>
+					<div className='h-[250px] w-[150px]'>
+						<Image
+							src='/images/p1_idle.gif'
+							alt='my gif'
+							height={500}
+							width={500}
+							className='object-cover min-h-[250px] min-w-[160px]'
+							unoptimized
+						/>
+					</div>
 				</div>
-				<video
-					id='video'
-					ref={videoRef}
-					className='w-[640px] h-[480px] rounded-lg border border-gray-300 scale-x-[-1]'
-					muted
-					playsInline
-				/>
+				<Camera onGesturesDetected={handleGestures} />
 				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 text-right'>
-					<h2 className='text-lg font-semibold mb-2'>
-						Player 2
-					</h2>
-					{gestureResult?.gestures.length ? (
-						gestureResult.gestures[0].map((g) => (
-							<div key={g.categoryName} className='mb-1 text-5xl'>
-								<strong>{g.categoryName}</strong>
-							</div>
-						))
+					<h2 className='text-lg font-semibold mb-2'>Player 2</h2>
+					{gestures ? (
+						<div className='mb-1 text-5xl'>
+							<strong>{gestures["right"]}</strong>
+						</div>
 					) : (
-						<p>No gestures detected.</p>
+						<p>No Gestures Detected</p>
 					)}
-          <div className="relative bottom-0 h-[200px]">
-            <Image src="/images/p2_idle.gif" alt="my gif" height={500} width={500} />
-          </div>
+					<div className='relative bottom-0 h-[200px]'>
+						<Image
+							src='/images/p2_idle.gif'
+							alt='my gif'
+							height={500}
+							width={500}
+							unoptimized
+						/>
+					</div>
 				</div>
 			</div>
       <h1 className="w-[200px] mx-auto text-center pt-4 text-white">Make the gesture!</h1>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Commissioner } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Suspense } from "react";
+import { NavigationEvents } from "@/components/NavigationEvents";
 
 const commissioner = Commissioner({
 	variable: "--font-commissioner",
@@ -40,6 +42,9 @@ export default function RootLayout({
 						}}
 					/>
 				</footer>
+				<Suspense fallback={null}>
+					<NavigationEvents />
+				</Suspense>
 			</body>
 		</html>
 	);
