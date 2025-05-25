@@ -55,26 +55,30 @@ export default function AirPiano() {
 	return (
 		<div className='flex flex-col items-center justify-center'>
 			<div className='flex flex-3'>
-				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'></div>
-				<Camera onGesturesDetected={handleGestures} />
 				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
-					<h2 className='text-lg font-semibold mb-2'>
-						Detected Gestures:
+				<h2 className='text-lg font-semibold mb-2'>
+						Left Hand
 					</h2>
-					{gestures ? (
+				{gestures ? (
 						<>
 							<div className='mb-3'>
-								<div className='font-semibold mb-1'>
-									Left Hand:
-								</div>
 								<div className='mb-1 ml-2'>
 									<strong>{gestures["left"]}</strong>
 								</div>
 							</div>
+						</>
+					) : (
+						<p>No gestures detected</p>
+					)}
+				</div>
+				<Camera onGesturesDetected={handleGestures} />
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
+					<h2 className='text-lg font-semibold mb-2'>
+						Right Hand
+					</h2>
+					{gestures ? (
+						<>
 							<div className='mb-3'>
-								<div className='font-semibold mb-1'>
-									Right Hand:
-								</div>
 								<div className='mb-1 ml-2'>
 									<strong>{gestures["right"]}</strong>
 								</div>

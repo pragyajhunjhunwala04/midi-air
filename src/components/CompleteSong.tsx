@@ -13,14 +13,22 @@ const CompleteSong = ({finalScore}: Props) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="max-w-5xl m-auto">
-            <div className="flex m-auto max-w-xl">
+          { finalScore > 10 ? <div className="flex m-auto max-w-xl">
                 <div className="h-[250px] w-1/2 fit-content">
                     <Image src="/images/p1_win.gif" alt="my gif" height={200} width={200} className="object-cover min-h-[250px] min-w-[160px]"/>
                 </div>
                 <div className="h-[250px] w-1/2  fit-content">
                     <Image src="/images/p2_win.gif" alt="my gif" height={200} width={200} className="object-cover min-h-[250px] min-w-[160px]"/>
                 </div>
-            </div>
+            </div> :
+            <div className="flex m-auto max-w-xl">
+                <div className="h-[250px] w-1/2 fit-content">
+                    <Image src="/images/p1_lose.gif" alt="my gif" height={200} width={200} className="object-cover min-h-[250px] min-w-[160px]"/>
+                </div>
+                <div className="h-[250px] w-1/2  fit-content">
+                    <Image src="/images/p2_lose.gif" alt="my gif" height={200} width={200} className="object-cover min-h-[250px] min-w-[160px]"/>
+                </div>
+            </div>}
             <p className="text-lg text-medium text-center mt-[75px] border border-white/20 bg-white bg-opacity-10 p-8 rounded-xl backdrop-blur-sm"> You got a score of {finalScore}!</p>
     </motion.div>
   )
