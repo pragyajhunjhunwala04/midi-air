@@ -1,8 +1,9 @@
 'use client';
-import React from 'react'
+import React, {useState} from 'react'
 import Image from "next/image";
 import Button from './Button';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 
 type Props = {}
 
@@ -22,9 +23,15 @@ const songs: Song[] = [
 ];
 
 
-const SelectSong = ({ selectedSong }) => {
+const SelectSong = ({selectedSong}) => {
+    const [song, setSong] = useState('');
+
     function confirmSong() {
-       selectedSong('Hello from child!');
+       selectedSong(song);
+    }
+
+    function changeSong(s : string){
+        setSong(s);
     }
 
   return (
@@ -38,7 +45,7 @@ const SelectSong = ({ selectedSong }) => {
                 >
                     <div className="flex flex-4 m-auto">
                     {songs.map((s) => (
-                     <motion.div whileHover={{ scale: 1.1 }} className="w-1/4 m-5 flex flex-col cursor-pointer">
+                     <motion.div whileHover={{ scale: 1.1 }} className={clsx("w-1/4 m-5 flex flex-col cursor-pointer rounded-xl p-8", s.songName === song ? 'shadow-inner shadow-[#781542]' : 'shadow-none')} onClick={() => changeSong(s.songName)}>
                         <span className="text-normal text-white text-opacity-75 text-xs mb-4 mx-auto w-1/4 text-center">{s.difficulty}</span>
                         <Image
                             src={s.imgSrc}
@@ -54,8 +61,8 @@ const SelectSong = ({ selectedSong }) => {
                     </motion.div>
                     ))}
             </div>
-            <div className="w-[200px] m-auto text-center">
-                <Button text="Confirm Song" onClick={confirmSong}></Button>
+            <div className="w-[200px] m-auto text-center" onClick={confirmSong}>
+                <Button text="Confirm Song"></Button>
             </div>
         </motion.div>
         </div>
