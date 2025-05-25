@@ -86,27 +86,24 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 	}, [selectedSong]);
 
 	useEffect(() => {
-		if (timeInterval !== 2) return;
-
 		const gameInterval = setInterval(() => {
 			if (gestures && gestures.left != null && gestures.right != null) {
 				let p1_score = gestures.left === leftGestures[count];
 				let p2_score = gestures.right === rightGestures[count];
-				console.log(p1_score, p2_score);
 				if (p1_score) {
 					set_p1_sprite("/images/p1_good.gif");
 					setTimeout(() => {
 						set_p1_sprite("/images/p1_idle.gif");
-					}, 500);
+					}, 750);
 				}
 				if (p2_score) {
 					set_p2_sprite("/images/p2_good.gif");
 					setTimeout(() => {
 						set_p2_sprite("/images/p2_idle.gif");
-					}, 500);
+					}, 750);
 				}
 				if (p1_score && p2_score) {
-					setCount(count + 1);
+					setScore(score + 1);
 				}
 			}
 			setCount((prevCount) => {
