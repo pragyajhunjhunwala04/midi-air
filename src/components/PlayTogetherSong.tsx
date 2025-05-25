@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import {
 	FilesetResolver,
 	GestureRecognizer,
@@ -88,20 +89,28 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
 		};
 	}, []);
 
-  const playBacktrack = () => {
-    const audio = null;
-    switch(selectedSong) {
-      case 'Love Story':
-        const audio = new Audio('/audio/love-story-notes.mp3');
-        audio.onended = () => {
-          gameScore(score);
-        };
-        audio.play();
-    }
-  };
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    playBacktrack();
+    let audio = null;
+    switch(selectedSong) {
+      case 'Love Story':
+        audio = new Audio('/audio/love-story-notes.mp3');
+        audio.play();
+        break;
+    }
+    audioRef.current = audio;
+    audio.onended = () => {
+          gameScore(score);
+        };
+
+    // Cleanup function to stop audio on unmount
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // optional: reset to start
+      }
+    };
   }, [selectedSong]);
 
 	return (
@@ -157,12 +166,12 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
       <div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify center flex'>
           <div className='w-1/2 border-b-4 border-b-white border-r'>
             <div className='w-1/4 border-b-8 border-b-green-500 float-right h-[120px]'>
-
+                {/* {/* Gesture movement goes here */}
             </div>
           </div>
           <div className='w-1/2 border-b-4 border-b-white border-l'>
             <div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'>
-
+                {/* Gesture movement goes here */}
             </div>
           </div>
       </div>
