@@ -18,16 +18,6 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 	const [score, setScore] = useState(0);
 	useState<GestureRecognizer | null>(null);
 	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
-
-	const handleGestures = (gestureResult: SimplifiedGestures | null) => {
-		if (!gestureResult) return;
-
-		setGestures(gestureResult);
-
-		// Do something with the new gestures here
-		// console.log("Gestures detected:", gestureResult);
-	};
-
 	const song = loveSong;
 
 	const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -40,6 +30,24 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 	const [rightGestures, setRightGestures] = useState<string[]>([]);
 	const [p1_sprite, set_p1_sprite] = useState("/images/p1_idle.gif");
 	const [p2_sprite, set_p2_sprite] = useState("/images/p2_idle.gif");
+
+	const gesturesRef = useRef<SimplifiedGestures | null>(null);
+	const scoreRef = useRef(score);
+
+	const handleGestures = (gestureResult: SimplifiedGestures | null) => {
+		if (!gestureResult) return;
+
+		console.log(gestureResult);
+		setGestures(gestureResult);
+
+		// Do something with the new gestures here
+		// console.log("Gestures detected:", gestureResult);
+	};
+
+	// Update the ref when gestures change
+	useEffect(() => {
+		gesturesRef.current = gestures;
+	}, [gestures]);
 
 	const noteToGesture: { [key: string]: string } = {
 		A: "/images/a.svg",
@@ -67,13 +75,13 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 				setTimeInterval(1.5);
 				setLeftGestures(telepatia.leftSequence);
 				setRightGestures(telepatia.rightSequence);
-				audio.play();
+				// audio.play();
 				break;
 		}
 		audioRef.current = audio;
 		if (!audio) return;
 		audio.onended = () => {
-			gameScore(score);
+			gameScore(scoreRef.current);
 		};
 
 		return () => {
@@ -86,27 +94,43 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 
 	useEffect(() => {
 		const gameInterval = setInterval(() => {
-			if (gestures && gestures.left != null && gestures.right != null) {
-				let p1_score = gestures.left === leftGestures[count];
-				let p2_score = gestures.right === rightGestures[count];
-				if (p1_score) {
-					set_p1_sprite("/images/p1_good.gif");
-					setTimeout(() => {
-						set_p1_sprite("/images/p1_idle.gif");
-					}, 750);
-				}
-				if (p2_score) {
-					set_p2_sprite("/images/p2_good.gif");
-					setTimeout(() => {
-						set_p2_sprite("/images/p2_idle.gif");
-					}, 750);
-				}
-				if (p1_score && p2_score) {
-					setScore(score + 1);
-				}
-			}
 			setCount((prevCount) => {
 				const newCount = prevCount + 1;
+				const currentGestures = gesturesRef.current;
+
+				if (
+					currentGestures &&
+					currentGestures.left &&
+					currentGestures.right
+				) {
+					// Check correctness
+					const p1_score =
+						currentGestures.left === leftGestures[newCount];
+					const p2_score =
+						currentGestures.right === rightGestures[newCount];
+
+					// console.log(currentGestures.left, leftGestures[newCount]);
+					if (p1_score) {
+						set_p1_sprite("/images/p1_good.gif");
+						setTimeout(
+							() => set_p1_sprite("/images/p1_idle.gif"),
+							750
+						);
+					}
+					if (p2_score) {
+						set_p2_sprite("/images/p2_good.gif");
+						setTimeout(
+							() => set_p2_sprite("/images/p2_idle.gif"),
+							750
+						);
+					}
+					if (p1_score && p2_score) {
+						setScore((prev) => {
+							scoreRef.current = prev + 1; // update ref too
+							return scoreRef.current;
+						});
+					}
+				}
 
 				if (newCount < leftGestures.length) {
 					if (leftGestures[newCount] != "X") {
@@ -155,6 +179,10 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 		return () => clearInterval(gameInterval);
 	}, [timeInterval]);
 
+	// useEffect(() => {
+	// 	console.log(gestures);
+	// }, [gestures]);
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 30 }}
@@ -164,42 +192,49 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 		>
 			<h1 className='text-md my-4'>Playing: {selectedSong}</h1>
 			<div className='flex flex-3'>
-				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
-					<h2 className='text-lg font-semibold mb-2'>Player 1</h2>
-					{gestures ? (
-						<div className='mb-1 text-5xl'>
-							<strong>{gestures["left"]}</strong>
-						</div>
-					) : (
-						<p>No Gestures Detected</p>
-					)}
-					<div className='h-[250px] w-[150px]'>
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 flex flex-col justify-between'>
+					<div>
+						<h2 className='text-lg font-semibold mb-2'>Player 1</h2>
+						{gestures ? (
+							<div className='mb-1 text-5xl'>
+								<strong>{gestures["left"]}</strong>
+							</div>
+						) : (
+							<p>No Gestures Detected</p>
+						)}
+					</div>
+
+					<div className='w-full relative overflow-hidden flex-1 flex items-end justify-center'>
 						<Image
 							src={p1_sprite}
 							alt='my gif'
-							height={500}
-							width={500}
-							className='object-cover min-h-[250px] min-w-[160px]'
+							height={250}
+							width={150}
+							className='object-cover h-[210px]'
 							unoptimized
 						/>
 					</div>
 				</div>
 				<Camera onGesturesDetected={handleGestures} />
-				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 text-right'>
-					<h2 className='text-lg font-semibold mb-2'>Player 2</h2>
-					{gestures ? (
-						<div className='mb-1 text-5xl'>
-							<strong>{gestures["right"]}</strong>
-						</div>
-					) : (
-						<p>No Gestures Detected</p>
-					)}
-					<div className='relative bottom-0 h-[200px]'>
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 flex flex-col justify-between'>
+					<div>
+						<h2 className='text-lg font-semibold mb-2'>Player 2</h2>
+						{gestures ? (
+							<div className='mb-1 text-5xl'>
+								<strong>{gestures["right"]}</strong>
+							</div>
+						) : (
+							<p>No Gestures Detected</p>
+						)}
+					</div>
+
+					<div className='w-full relative overflow-hidden flex-1 flex items-end justify-center'>
 						<Image
 							src={p2_sprite}
 							alt='my gif'
-							height={500}
-							width={500}
+							height={250}
+							width={150}
+							className='object-contain'
 							unoptimized
 						/>
 					</div>
