@@ -16,7 +16,6 @@ type Props = {
 
 export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 	const [score, setScore] = useState(0);
-	console.log(setScore);
 	useState<GestureRecognizer | null>(null);
 	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
 
