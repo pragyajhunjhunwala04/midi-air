@@ -35,14 +35,13 @@ export default function AirPiano() {
 				{
 					baseOptions: {
 						modelAssetPath:
-							// "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task",
+							// "https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task",`
 							"./asl_gesture_recognizer.task",
 					},
-					numHands: 2,
 				}
 			);
 
-			await recognizer.setOptions({ runningMode: "VIDEO" });
+			await recognizer.setOptions({ runningMode: "VIDEO", numHands: 2 });
 
 			setGestureRecognizer(recognizer);
 
@@ -63,7 +62,7 @@ export default function AirPiano() {
 						videoRef.current,
 						videoRef.current.currentTime
 					);
-					console.log(result.gestures.length);
+					// console.log(result);
 					setGestureResult(result);
 					lastVideoTime = videoRef.current.currentTime;
 				}
@@ -119,12 +118,30 @@ export default function AirPiano() {
 						Detected Gestures:
 					</h2>
 					{gestureResult?.gestures.length ? (
-						gestureResult.gestures[0].map((g) => (
-							<div key={g.categoryName} className='mb-1'>
-								<strong>{g.categoryName}</strong> - Confidence:{" "}
-								{(g.score * 100).toFixed(1)}%
-							</div>
-						))
+						gestureResult.gestures.map((gestureSet, index) => {
+							const handInfo =
+								gestureResult.handedness?.[index]?.[0];
+							const handLabel =
+								handInfo?.displayName || `Hand ${index + 1}`;
+
+							return (
+								<div key={index} className='mb-3'>
+									<div className='font-semibold mb-1'>
+										{handLabel} Hand:
+									</div>
+									{gestureSet.map((g) => (
+										<div
+											key={g.categoryName || g.score}
+											className='mb-1 ml-2'
+										>
+											<strong>
+												{g.categoryName || "Unknown"}
+											</strong>
+										</div>
+									))}
+								</div>
+							);
+						})
 					) : (
 						<p>No gestures detected.</p>
 					)}
