@@ -5,9 +5,7 @@ import React from "react";
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
 
-type Props = {};
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
 	const pathname = usePathname();
 	return (
 		<nav

@@ -1,5 +1,4 @@
 // utils/audio.ts
-import { g } from "motion/react-client";
 import * as Tone from "tone";
 import { SimplifiedGestures } from "./gestures";
 
@@ -18,26 +17,11 @@ export function playNote(note: string, duration: string = "4n") {
 	synth.triggerAttackRelease(note, duration);
 }
 
-interface GestureResult {
-	gestures: Array<
-		Array<{
-			score: number;
-			index: number;
-			categoryName: string;
-			displayName: string;
-		}>
-	>;
-	handedness: Array<
-		Array<{
-			score: number;
-			index: number;
-			categoryName: string;
-			displayName: string;
-		}>
-	>;
+type gestureToOctaveType = {
+	[key: string]: string;
 }
 
-const gestureToOctave: any = {
+const gestureToOctave: gestureToOctaveType = {
 	A: "0",
 	B: "1",
 	C: "2",

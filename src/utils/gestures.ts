@@ -1,19 +1,13 @@
-type Gesture = {
-	categoryName: string;
-	[key: string]: any;
-};
-
-type GestureResult = {
-	gestures: Gesture[][];
-	handedness: { displayName: "Left" | "Right" }[][];
-};
+import { GestureRecognizerResult } from "@mediapipe/tasks-vision";
 
 export type SimplifiedGestures = {
 	left: string | null;
 	right: string | null;
 };
 
-export function simplifyGestures(result: GestureResult): SimplifiedGestures {
+export function simplifyGestures(
+	result: GestureRecognizerResult
+): SimplifiedGestures {
 	let left: string | null = null;
 	let right: string | null = null;
 

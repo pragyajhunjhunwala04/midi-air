@@ -3,11 +3,8 @@ import React, {useState} from 'react'
 import SelectSong from '@/components/SelectSong';
 import PlayTogetherSong from '@/components/PlayTogetherSong';
 import CompleteSong from '@/components/CompleteSong';
-import clsx from 'clsx';
 
-type Props = {};
-
-const PlayTogether = (props: Props) => {
+const PlayTogether = () => {
 	const [song, setSong] = useState('');
 	const [score, setSongScore] = useState(0);
 	const [stage, setStage] = useState(0);

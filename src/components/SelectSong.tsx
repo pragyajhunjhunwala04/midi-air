@@ -5,7 +5,9 @@ import Button from "./Button";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
-type Props = {};
+type Props = {
+	selectedSong: (song: string) => void;
+};
 
 type Song = {
 	id: number;
@@ -46,7 +48,7 @@ const songs: Song[] = [
 	},
 ];
 
-const SelectSong = ({ selectedSong }) => {
+const SelectSong = ({ selectedSong }: Props) => {
 	const [song, setSong] = useState("");
 
 	function confirmSong() {

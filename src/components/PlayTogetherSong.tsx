@@ -1,21 +1,23 @@
 "use client";
 
 import React, { JSX, useEffect, useRef, useState } from "react";
-import { useLocation } from 'react-router-dom';
 import {
-	FilesetResolver,
 	GestureRecognizer,
-	GestureRecognizerResult,
 } from "@mediapipe/tasks-vision";
 import { motion } from "framer-motion";
 import "react-piano/dist/styles.css";
 import Image from "next/image";
-import { select } from "motion/react-client";
 import Camera from "./Camera";
 import { SimplifiedGestures } from "@/utils/gestures";
 
-export default function PlayTogetherSong({ selectedSong, gameScore }) {
+type Props = {
+	selectedSong: string;
+	gameScore: (score: number) => void;
+}
+
+export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
 	const [score, setScore] = useState(0);
+	console.log(setScore);
 	useState<GestureRecognizer | null>(null);
 	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
 
@@ -33,6 +35,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
   const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
   const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
   const [count, setCount] = useState(0);
+  console.log(count);
   const [timeInterval, setTimeInterval] = useState(1);
   const [leftGestures, setLeftGestures] = useState<string[]>([]);
   const [rightGestures, setRightGestures] = useState<string[]>([]);
@@ -78,6 +81,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
         break;
     }
     audioRef.current = audio;
+	if (!audio) return;
     audio.onended = () => {
           gameScore(score);
         };

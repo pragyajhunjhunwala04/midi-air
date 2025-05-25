@@ -6,9 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from 'framer-motion';
 
-type Props = {};
-
-const Home = (props: Props) => {
+const Home = () => {
 	return (
 	<div>
 		<motion.div
