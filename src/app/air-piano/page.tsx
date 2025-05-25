@@ -2,7 +2,6 @@
 
 import React, { useRef, useState } from "react";
 
-import { Piano, MidiNumbers } from "react-piano";
 import "react-piano/dist/styles.css";
 import { getNoteFromGestures, playNote } from "@/utils/audio";
 import { SimplifiedGestures } from "@/utils/gestures";
@@ -14,9 +13,6 @@ export default function AirPiano() {
 	const noteBufferRef = useRef<string[]>([]);
 
 	const STABILITY_THRESHOLD = 3; // how many consistent frames needed
-
-	const firstNote = MidiNumbers.fromNote("c0"); // MIDI number for C3
-	const lastNote = MidiNumbers.fromNote("b6"); // MIDI number for F5
 
 	const handleGestures = (gestureResult: SimplifiedGestures | null) => {
 		if (!gestureResult) return;
@@ -88,15 +84,6 @@ export default function AirPiano() {
 						<p>No gestures detected</p>
 					)}
 				</div>
-			</div>
-			<div className='mt-4 p-4 w-[1200px] text-white rounded-xl justify center'>
-				<Piano
-					noteRange={{ first: firstNote, last: lastNote }}
-					// playNote={playNote}
-					stopNote={() => {}}
-					width={1100}
-					className='ml-8'
-				/>
 			</div>
 		</div>
 	);

@@ -42,7 +42,7 @@ const Home = () => {
 				</div>
 				<div className="w-1/2 m-4 border border-white/20 bg-white bg-opacity-10 p-8 rounded-xl backdrop-blur-sm">
 					<h3 className="font-medium text-md mb-4">Somewhere between Motion and Melody.</h3>
-					<p className="text-white text-opacity-75 text-sm">Enjoy music but don’t know how to play an instrument? Midi-Air takes a song and generates chords in the form of hand signs. Play music with just air hand motions!</p>
+					<p className="text-white text-opacity-75 text-sm">Enjoy music but don’t know how to play an instrument? Midi-Air takes a song and generates notes in the form of hand signs. Play music with just air hand motions!</p>
 				</div>
 			</div>
 		</motion.div>
@@ -61,9 +61,9 @@ const Home = () => {
 						className="w-[200px] m-auto pb-8"
 					/>
 			<div className="max-w-4xl m-auto border border-white/20 bg-white bg-opacity-10 p-8 rounded-xl backdrop-blur-sm">
-				<p className="mb-4">Pick a song from a list. Hand signs will appear on the screen to represent chords.
+				<p className="mb-4">Pick a song from a list. Hand signs will appear on the screen to represent notes in different octaves.
 					When the sign reaches the line, create the correct sign in the camera.
-					You will receive points for every correct sign made.</p>
+					You will receive points for every correct sign made together with your teammate!</p>
 					<div className=" w-[250px] py-2 m-auto text-center rounded-full bg-white text-black transition-colors duration-150 cursor-pointer hover:shadow-[#781542] hover:shadow-md">
 						<Link href='/play-together'>
 							Play Together
