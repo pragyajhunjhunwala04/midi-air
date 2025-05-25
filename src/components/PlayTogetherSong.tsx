@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-	FilesetResolver,
-	GestureRecognizer,
-	GestureRecognizerResult,
-} from "@mediapipe/tasks-vision";
+import { GestureRecognizer } from "@mediapipe/tasks-vision";
 import { motion } from "framer-motion";
 import "react-piano/dist/styles.css";
 import Image from "next/image";
@@ -15,9 +11,7 @@ import { SimplifiedGestures } from "@/utils/gestures";
 
 export default function PlayTogetherSong({ selectedSong, gameScore }) {
 	const [score, setScore] = useState(0);
-	const videoRef = useRef<HTMLVideoElement>(null);
-	const [gestureRecognizer, setGestureRecognizer] =
-		useState<GestureRecognizer | null>(null);
+	useState<GestureRecognizer | null>(null);
 	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
 
 	const handleGestures = (gestureResult: SimplifiedGestures | null) => {
@@ -41,8 +35,28 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
 		}
 	};
 
+	const audioRef = useRef<HTMLAudioElement | null>(null);
+
 	useEffect(() => {
-		playBacktrack();
+		let audio = null;
+		switch (selectedSong) {
+			case "Love Story":
+				audio = new Audio("/audio/love-story-notes.mp3");
+				audio.play();
+				break;
+		}
+		audioRef.current = audio;
+		audio.onended = () => {
+			gameScore(score);
+		};
+
+		// Cleanup function to stop audio on unmount
+		return () => {
+			if (audioRef.current) {
+				audioRef.current.pause();
+				audioRef.current.currentTime = 0; // optional: reset to start
+			}
+		};
 	}, [selectedSong]);
 
 	return (
@@ -104,6 +118,21 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
 				</div>
 				<div className='w-1/2 border-b-4 border-b-white border-l'>
 					<div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'></div>
+				</div>
+			</div>
+			<h1 className='w-[200px] mx-auto text-center pt-4 text-white'>
+				Make the gesture!
+			</h1>
+			<div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify center flex'>
+				<div className='w-1/2 border-b-4 border-b-white border-r'>
+					<div className='w-1/4 border-b-8 border-b-green-500 float-right h-[120px]'>
+						{/* {/* Gesture movement goes here */}
+					</div>
+				</div>
+				<div className='w-1/2 border-b-4 border-b-white border-l'>
+					<div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'>
+						{/* Gesture movement goes here */}
+					</div>
 				</div>
 			</div>
 		</motion.div>
