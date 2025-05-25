@@ -77,6 +77,20 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 				setRightGestures(telepatia.rightSequence);
 				audio.play();
 				break;
+      case 'Pink Pony Club':
+        audio = new Audio('/audio/pink-pony-club-notes.mp3');
+        setTimeInterval(1.8);
+        setLeftGestures(pink.leftSequence);
+        setRightGestures(pink.rightSequence);
+        audio.play();
+        break;
+      case 'Firework':
+        audio = new Audio('/audio/firework-notes.mp3');
+        setTimeInterval(2.3);
+        setLeftGestures(fireworks.leftSequence);
+        setRightGestures(fireworks.rightSequence);
+        audio.play();
+        break;
 		}
 		audioRef.current = audio;
 		if (!audio) return;
