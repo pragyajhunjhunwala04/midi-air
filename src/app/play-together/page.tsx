@@ -23,15 +23,17 @@ const PlayTogether = (props: Props) => {
   	}
 
 	return <div>
-		<div className={clsx('', stage == 0 ? 'visible' : 'hidden')}>
-			<SelectSong selectedSong={confirmSong}/>
-		</div>
-		<div className={clsx('', stage == 1 ? 'visible' : 'hidden')}>
-			<PlayTogetherSong selectedSong={song} gameScore={songScore}/>
-		</div>
-		<div className={clsx('', stage == 2 ? 'visible' : 'hidden')}>
-			<CompleteSong finalScore={score}/>
-		</div>
+		{stage === 0 && (
+		<SelectSong selectedSong={confirmSong} />
+		)}
+
+		{stage === 1 && (
+		<PlayTogetherSong selectedSong={song} gameScore={songScore} />
+		)}
+
+		{stage === 2 && (
+		<CompleteSong finalScore={score} />
+		)}
 	</div>;
 };
 
