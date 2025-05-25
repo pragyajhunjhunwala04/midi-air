@@ -1,16 +1,12 @@
 "use client";
 
 import React, { JSX, useEffect, useRef, useState } from "react";
-import { useLocation } from 'react-router-dom';
 import {
-	FilesetResolver,
 	GestureRecognizer,
-	GestureRecognizerResult,
 } from "@mediapipe/tasks-vision";
 import { motion } from "framer-motion";
 import "react-piano/dist/styles.css";
 import Image from "next/image";
-import { select } from "motion/react-client";
 import Camera from "./Camera";
 import { SimplifiedGestures } from "@/utils/gestures";
 
@@ -26,18 +22,6 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
 
 		// Do something with the new gestures here
 		console.log("Gestures detected:", gestureResult);
-	};
-
-	const playBacktrack = () => {
-		const audio = null;
-		switch (selectedSong) {
-			case "Love Story":
-				const audio = new Audio("/audio/love-story-notes.mp3");
-				audio.onended = () => {
-					gameScore(score);
-				};
-				audio.play();
-		}
 	};
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -57,6 +41,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
         break;
     }
     audioRef.current = audio;
+	if (!audio) return;
     audio.onended = () => {
           gameScore(score);
         };

@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-type Props = {};
-
 const note_count = 20;
 
 const note_colors: string[] = [
@@ -18,7 +16,7 @@ interface NoteStyle extends React.CSSProperties {
 	"--duration"?: string;
 }
 
-const GradientNotes = (props: Props) => {
+const GradientNotes = () => {
 	const [domLoaded, setDomLoaded] = useState(false);
 
 	useEffect(() => {
