@@ -25,27 +25,39 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
 		setGestures(gestureResult);
 
 		// Do something with the new gestures here
-		console.log("Gestures detected:", gestureResult);
+		// console.log("Gestures detected:", gestureResult);
 	};
 
-	const playBacktrack = () => {
-		const audio = null;
-		switch (selectedSong) {
-			case "Love Story":
-				const audio = new Audio("/audio/love-story-notes.mp3");
-				audio.onended = () => {
-					gameScore(score);
-				};
-				audio.play();
-		}
-	};
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
   const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
   const [count, setCount] = useState(0);
   const [timeInterval, setTimeInterval] = useState(1);
+  const [leftGestures, setLeftGestures] = useState<string[]>([]);
+  const [rightGestures, setRightGestures] = useState<string[]>([]);
+  const [p1_sprite, set_p1_sprite] = useState('/images/p1_idle.gif');
+  const [p2_sprite, set_p2_sprite] = useState('/images/p2_idle.gif');
 
+  const noteToGesture: { [key: string]: string } = {
+    A: '/images/a.svg',
+    B: '/images/b.svg',
+    C: '/images/c.svg',
+    D: '/images/d.svg',
+    E: '/images/e.svg',
+    F: '/images/f.svg',
+    G: '/images/d.svg',
+    X: '',
+  };
+
+  const love_song_left = ["X", "G", "G", "D", "D", "E", "E", "C", "C", "D", "D", "C", "C", "B", "B", "C", "C", "D", "D", "C", "C", "B", "E", "D", "D", "C", "D", "E", "D", "G", "A", "B", "A", "G", "G", "D", "D", "E", "E", "C", "D"];
+  const love_song_right = ["X", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "C", "C", "D", "D", "D", "D", "D", "D", "C", "D", "D", "D", "D", "D", "D", "D", "C", "C", "C", "C", "C", "C", "D", "D", "D", "D", "D", "D"];
+  const telepatia_left =  ["X", "F", "F", "F", "F", "F", "F", "F", "F", "F", "A", "F", "F", "F", "A", "F", "F"];
+  const telepatia_right =  ["X", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E"];
+  const pink_left =  ["X", "C", "C", "C", "C", "F", "G", "D", "B", "F", "G", "D", "B", "F", "G", "D", "B", "F", "G", "D", "B", "X", "X", "X", "X", "X", "X", "X", "X", "F", "G", "D", "G", "F", "G", "D", "B"];
+  const pink_right = ["X", "A", "A", "A", "A", "B", "B", "B", "A", "B", "B", "B", "A", "A", "A", "A", "A", "A", "A", "A", "A", "X", "X", "X", "X", "X", "X", "X", "X", "A", "A", "A", "A", "A", "A", "A", "A"];
+  const firework_left = ["X", "C", "A", "G", "G", "C", "A", "G", "G", "C", "A", "G", "G", "C", "A", "G", "G", "C", "A", "G", "G", "D", "F", "F", "C", "D", "F", "F", "C", "D", "F", "F", "C", "D", "F", "F", "C", "D", "F", "C", "C", "D", "F", "C", "C"];
+  const firework_right =  ["X", "E", "D", "D", "D", "E", "D", "D", "D", "E", "D", "D", "D", "E", "D", "D", "D", "E", "D", "D", "D", "C", "C", "A", "B", "C", "C", "A", "B", "C", "C", "B", "C", "C", "C", "B", "C", "C", "C", "C", "C", "C", "C", "C", "C"];
 
   useEffect(() => {
     let audio = null;
@@ -53,6 +65,15 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
       case 'Love Story':
         audio = new Audio('/audio/love-story-notes.mp3');
         setTimeInterval(2);
+        setLeftGestures(love_song_left);
+        setRightGestures(love_song_right);
+        audio.play();
+        break;
+      case 'telepatia':
+        audio = new Audio('/audio/love-story-notes.mp3');
+        setTimeInterval(1.5);
+        setLeftGestures(telepatia_left);
+        setRightGestures(telepatia_right);
         audio.play();
         break;
     }
@@ -64,42 +85,66 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current.currentTime = 0; // optional: reset to start
+        audioRef.current.currentTime = 0; 
       }
     };
   }, [selectedSong]);
 
   useEffect(() => {
-  if (timeInterval !== 2) return; // Only run once set
+  if (timeInterval !== 2) return; 
 
   const gameInterval = setInterval(() => {
+    if (gestures && gestures.left != null && gestures.right != null) {
+      let p1_score = gestures.left === leftGestures[count];
+      let p2_score = gestures.right === rightGestures[count];
+      console.log(p1_score, p2_score);
+      if (p1_score) {
+        set_p1_sprite('/images/p1_good.gif');
+        setTimeout(() => {
+          set_p1_sprite('/images/p1_idle.gif'); 
+        }, 500); 
+      }
+      if (p2_score) {
+        set_p2_sprite('/images/p2_good.gif');
+        setTimeout(() => {
+          set_p2_sprite('/images/p2_idle.gif'); 
+        }, 500); 
+      }
+      if (p1_score && p2_score) {
+        setCount(count + 1);
+      }
+    }
     setCount(prevCount => {
       const newCount = prevCount + 1;
 
-      setLeftElement([
-        <motion.div
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 1, x: 500 }}
-          transition={{ duration: timeInterval }}
-          className="absolute top-0 left-0"
-          key={newCount}
-        >
-          <Image src="/images/a.svg" alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
-        </motion.div>
-      ]);
-
-      setRightElement([
-        <motion.div
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 1, x: -500 }}
-          transition={{ duration: timeInterval }}
-          className="absolute top-0 right-0"
-          key={newCount}
-        >
-          <Image src="/images/b.svg" alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
-        </motion.div>
-      ]);
-
+      if (newCount < leftGestures.length) {
+        if (leftGestures[newCount] != "X") {
+          setLeftElement([
+          <motion.div
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: 1, x: 500 }}
+            transition={{ duration: timeInterval }}
+            className="absolute top-0 left-0"
+            key={newCount}
+          >
+            <Image src={noteToGesture[leftGestures[newCount]]} alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
+          </motion.div>
+        ]);
+        }
+        if (rightGestures[newCount] != "X") {
+            setRightElement([
+            <motion.div
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: 1, x: -500 }}
+              transition={{ duration: timeInterval }}
+              className="absolute top-0 right-0"
+              key={newCount}
+            >
+            <Image src={noteToGesture[rightGestures[newCount]]} alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
+          </motion.div>
+        ]);
+        }
+      }
       return newCount;
     });
   }, timeInterval * 1000);
@@ -127,7 +172,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
 					)}
 					<div className='h-[250px] w-[150px]'>
 						<Image
-							src='/images/p1_idle.gif'
+							src={p1_sprite}
 							alt='my gif'
 							height={500}
 							width={500}
@@ -148,7 +193,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
 					)}
 					<div className='relative bottom-0 h-[200px]'>
 						<Image
-							src='/images/p2_idle.gif'
+							src={p2_sprite}
 							alt='my gif'
 							height={500}
 							width={500}

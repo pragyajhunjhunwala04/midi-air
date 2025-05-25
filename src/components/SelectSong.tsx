@@ -39,9 +39,9 @@ const songs: Song[] = [
 	},
 	{
 		id: 3,
-		songName: "No One Noticed",
-		artistName: "The Marias",
-		imgSrc: "/images/Chappell_Roan_-_Pink_Pony_Club.png",
+		songName: "Firework",
+		artistName: "Katy Perry",
+		imgSrc: "/images/fireworks.jpg",
 		difficulty: "Hard",
 	},
 ];
