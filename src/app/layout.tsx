@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Commissioner } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { Suspense } from "react";
 
 const commissioner = Commissioner({
 	variable: "--font-commissioner",
