@@ -101,21 +101,20 @@ export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
     if (gestures && gestures.left != null && gestures.right != null) {
       let p1_score = gestures.left === leftGestures[count];
       let p2_score = gestures.right === rightGestures[count];
-      console.log(p1_score, p2_score);
       if (p1_score) {
         set_p1_sprite('/images/p1_good.gif');
         setTimeout(() => {
           set_p1_sprite('/images/p1_idle.gif'); 
-        }, 500); 
+        }, 750); 
       }
       if (p2_score) {
         set_p2_sprite('/images/p2_good.gif');
         setTimeout(() => {
           set_p2_sprite('/images/p2_idle.gif'); 
-        }, 500); 
+        }, 750); 
       }
       if (p1_score && p2_score) {
-        setCount(count + 1);
+        setScore(score + 1);
       }
     }
     setCount(prevCount => {
@@ -165,47 +164,54 @@ export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
 		>
 			<h1 className='text-md my-4'>Playing: {selectedSong}</h1>
 			<div className='flex flex-3'>
-				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
-					<h2 className='text-lg font-semibold mb-2'>Player 1</h2>
-					{gestures ? (
-						<div className='mb-1 text-5xl'>
-							<strong>{gestures["left"]}</strong>
-						</div>
-					) : (
-						<p>No Gestures Detected</p>
-					)}
-					<div className='h-[250px] w-[150px]'>
-						<Image
-							src={p1_sprite}
-							alt='my gif'
-							height={500}
-							width={500}
-							className='object-cover min-h-[250px] min-w-[160px]'
-							unoptimized
-						/>
-					</div>
-				</div>
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 flex flex-col justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold mb-2'>Player 1</h2>
+            {gestures ? (
+              <div className='mb-1 text-5xl'>
+                <strong>{gestures["left"]}</strong>
+              </div>
+            ) : (
+              <p>No Gestures Detected</p>
+            )}
+          </div>
+
+          <div className="w-full relative overflow-hidden flex-1 flex items-end justify-center">
+            <Image
+              src={p1_sprite}
+              alt="my gif"
+              height={250}
+              width={150}
+              className="object-cover h-[210px]"
+              unoptimized
+            />
+          </div>
+        </div>
 				<Camera onGesturesDetected={handleGestures} />
-				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 text-right'>
-					<h2 className='text-lg font-semibold mb-2'>Player 2</h2>
-					{gestures ? (
-						<div className='mb-1 text-5xl'>
-							<strong>{gestures["right"]}</strong>
-						</div>
-					) : (
-						<p>No Gestures Detected</p>
-					)}
-					<div className='relative bottom-0 h-[200px]'>
-						<Image
-							src={p2_sprite}
-							alt='my gif'
-							height={500}
-							width={500}
-							unoptimized
-						/>
-					</div>
-				</div>
-			</div>
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 flex flex-col justify-between'>
+          <div>
+            <h2 className='text-lg font-semibold mb-2'>Player 2</h2>
+            {gestures ? (
+              <div className='mb-1 text-5xl'>
+                <strong>{gestures["right"]}</strong>
+              </div>
+            ) : (
+              <p>No Gestures Detected</p>
+            )}
+          </div>
+
+          <div className="w-full relative overflow-hidden flex-1 flex items-end justify-center">
+            <Image
+              src={p2_sprite}
+              alt="my gif"
+              height={250}
+              width={150}
+              className="object-contain"
+              unoptimized
+            />
+          </div>
+        </div>
+        </div>
       <h1 className="w-[200px] mx-auto text-center pt-4 text-white">Make the gesture!</h1>
       <div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify-center flex relative overflow-hidden'>
         <div className='w-1/2 border-b-4 border-b-white border-r'>
