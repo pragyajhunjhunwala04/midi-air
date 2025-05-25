@@ -1,21 +1,20 @@
 "use client";
 
 import React, { JSX, useEffect, useRef, useState } from "react";
-import {
-	GestureRecognizer,
-} from "@mediapipe/tasks-vision";
+import { GestureRecognizer } from "@mediapipe/tasks-vision";
 import { motion } from "framer-motion";
 import "react-piano/dist/styles.css";
 import Image from "next/image";
 import Camera from "./Camera";
 import { SimplifiedGestures } from "@/utils/gestures";
+import { loveSong, telepatia, pink, fireworks } from "../data/songSequences";
 
 type Props = {
 	selectedSong: string;
 	gameScore: (score: number) => void;
-}
+};
 
-export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
+export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 	const [score, setScore] = useState(0);
 	console.log(setScore);
 	useState<GestureRecognizer | null>(null);
@@ -30,131 +29,135 @@ export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
 		// console.log("Gestures detected:", gestureResult);
 	};
 
+	const song = loveSong;
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
-  const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
-  const [count, setCount] = useState(0);
-  console.log(count);
-  const [timeInterval, setTimeInterval] = useState(1);
-  const [leftGestures, setLeftGestures] = useState<string[]>([]);
-  const [rightGestures, setRightGestures] = useState<string[]>([]);
-  const [p1_sprite, set_p1_sprite] = useState('/images/p1_idle.gif');
-  const [p2_sprite, set_p2_sprite] = useState('/images/p2_idle.gif');
+	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
+	const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
+	const [count, setCount] = useState(0);
 
-  const noteToGesture: { [key: string]: string } = {
-    A: '/images/a.svg',
-    B: '/images/b.svg',
-    C: '/images/c.svg',
-    D: '/images/d.svg',
-    E: '/images/e.svg',
-    F: '/images/f.svg',
-    G: '/images/d.svg',
-    X: '',
-  };
+	const [timeInterval, setTimeInterval] = useState(1);
+	const [leftGestures, setLeftGestures] = useState<string[]>([]);
+	const [rightGestures, setRightGestures] = useState<string[]>([]);
+	const [p1_sprite, set_p1_sprite] = useState("/images/p1_idle.gif");
+	const [p2_sprite, set_p2_sprite] = useState("/images/p2_idle.gif");
 
-  const love_song_left = ["X", "G", "G", "D", "D", "E", "E", "C", "C", "D", "D", "C", "C", "B", "B", "C", "C", "D", "D", "C", "C", "B", "E", "D", "D", "C", "D", "E", "D", "G", "A", "B", "A", "G", "G", "D", "D", "E", "E", "C", "D"];
-  const love_song_right = ["X", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "C", "C", "D", "D", "D", "D", "D", "D", "C", "D", "D", "D", "D", "D", "D", "D", "C", "C", "C", "C", "C", "C", "D", "D", "D", "D", "D", "D"];
-  const telepatia_left =  ["X", "F", "F", "F", "F", "F", "F", "F", "F", "F", "A", "F", "F", "F", "A", "F", "F"];
-  const telepatia_right =  ["X", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E"];
-  const pink_left =  ["X", "C", "C", "C", "C", "F", "G", "D", "B", "F", "G", "D", "B", "F", "G", "D", "B", "F", "G", "D", "B", "X", "X", "X", "X", "X", "X", "X", "X", "F", "G", "D", "G", "F", "G", "D", "B"];
-  const pink_right = ["X", "A", "A", "A", "A", "B", "B", "B", "A", "B", "B", "B", "A", "A", "A", "A", "A", "A", "A", "A", "A", "X", "X", "X", "X", "X", "X", "X", "X", "A", "A", "A", "A", "A", "A", "A", "A"];
-  const firework_left = ["X", "C", "A", "G", "G", "C", "A", "G", "G", "C", "A", "G", "G", "C", "A", "G", "G", "C", "A", "G", "G", "D", "F", "F", "C", "D", "F", "F", "C", "D", "F", "F", "C", "D", "F", "F", "C", "D", "F", "C", "C", "D", "F", "C", "C"];
-  const firework_right =  ["X", "E", "D", "D", "D", "E", "D", "D", "D", "E", "D", "D", "D", "E", "D", "D", "D", "E", "D", "D", "D", "C", "C", "A", "B", "C", "C", "A", "B", "C", "C", "B", "C", "C", "C", "B", "C", "C", "C", "C", "C", "C", "C", "C", "C"];
+	const noteToGesture: { [key: string]: string } = {
+		A: "/images/a.svg",
+		B: "/images/b.svg",
+		C: "/images/c.svg",
+		D: "/images/d.svg",
+		E: "/images/e.svg",
+		F: "/images/f.svg",
+		G: "/images/d.svg",
+		X: "",
+	};
 
-  useEffect(() => {
-    let audio = null;
-    switch(selectedSong) {
-      case 'Love Story':
-        audio = new Audio('/audio/love-story-notes.mp3');
-        setTimeInterval(2);
-        setLeftGestures(love_song_left);
-        setRightGestures(love_song_right);
-        audio.play();
-        break;
-      case 'telepatia':
-        audio = new Audio('/audio/love-story-notes.mp3');
-        setTimeInterval(1.5);
-        setLeftGestures(telepatia_left);
-        setRightGestures(telepatia_right);
-        audio.play();
-        break;
-    }
-    audioRef.current = audio;
-	if (!audio) return;
-    audio.onended = () => {
-          gameScore(score);
-        };
-        
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0; 
-      }
-    };
-  }, [selectedSong]);
+	useEffect(() => {
+		let audio = null;
+		switch (selectedSong) {
+			case "Love Story":
+				audio = new Audio("/audio/love-story-notes.mp3");
+				setTimeInterval(2);
+				setLeftGestures(loveSong.leftSequence);
+				setRightGestures(loveSong.rightSequence);
+				audio.play();
+				break;
+			case "telepatia":
+				audio = new Audio("/audio/love-story-notes.mp3");
+				setTimeInterval(1.5);
+				setLeftGestures(telepatia.leftSequence);
+				setRightGestures(telepatia.rightSequence);
+				audio.play();
+				break;
+		}
+		audioRef.current = audio;
+		if (!audio) return;
+		audio.onended = () => {
+			gameScore(score);
+		};
 
-  useEffect(() => {
-  if (timeInterval !== 2) return; 
+		return () => {
+			if (audioRef.current) {
+				audioRef.current.pause();
+				audioRef.current.currentTime = 0;
+			}
+		};
+	}, [selectedSong]);
 
-  const gameInterval = setInterval(() => {
-    if (gestures && gestures.left != null && gestures.right != null) {
-      let p1_score = gestures.left === leftGestures[count];
-      let p2_score = gestures.right === rightGestures[count];
-      console.log(p1_score, p2_score);
-      if (p1_score) {
-        set_p1_sprite('/images/p1_good.gif');
-        setTimeout(() => {
-          set_p1_sprite('/images/p1_idle.gif'); 
-        }, 500); 
-      }
-      if (p2_score) {
-        set_p2_sprite('/images/p2_good.gif');
-        setTimeout(() => {
-          set_p2_sprite('/images/p2_idle.gif'); 
-        }, 500); 
-      }
-      if (p1_score && p2_score) {
-        setCount(count + 1);
-      }
-    }
-    setCount(prevCount => {
-      const newCount = prevCount + 1;
+	useEffect(() => {
+		if (timeInterval !== 2) return;
 
-      if (newCount < leftGestures.length) {
-        if (leftGestures[newCount] != "X") {
-          setLeftElement([
-          <motion.div
-            initial={{ opacity: 0.5 }}
-            animate={{ opacity: 1, x: 500 }}
-            transition={{ duration: timeInterval }}
-            className="absolute top-0 left-0"
-            key={newCount}
-          >
-            <Image src={noteToGesture[leftGestures[newCount]]} alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
-          </motion.div>
-        ]);
-        }
-        if (rightGestures[newCount] != "X") {
-            setRightElement([
-            <motion.div
-              initial={{ opacity: 0.5 }}
-              animate={{ opacity: 1, x: -500 }}
-              transition={{ duration: timeInterval }}
-              className="absolute top-0 right-0"
-              key={newCount}
-            >
-            <Image src={noteToGesture[rightGestures[newCount]]} alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
-          </motion.div>
-        ]);
-        }
-      }
-      return newCount;
-    });
-  }, timeInterval * 1000);
+		const gameInterval = setInterval(() => {
+			if (gestures && gestures.left != null && gestures.right != null) {
+				let p1_score = gestures.left === leftGestures[count];
+				let p2_score = gestures.right === rightGestures[count];
+				console.log(p1_score, p2_score);
+				if (p1_score) {
+					set_p1_sprite("/images/p1_good.gif");
+					setTimeout(() => {
+						set_p1_sprite("/images/p1_idle.gif");
+					}, 500);
+				}
+				if (p2_score) {
+					set_p2_sprite("/images/p2_good.gif");
+					setTimeout(() => {
+						set_p2_sprite("/images/p2_idle.gif");
+					}, 500);
+				}
+				if (p1_score && p2_score) {
+					setCount(count + 1);
+				}
+			}
+			setCount((prevCount) => {
+				const newCount = prevCount + 1;
 
-  return () => clearInterval(gameInterval);
-}, [timeInterval]);
+				if (newCount < leftGestures.length) {
+					if (leftGestures[newCount] != "X") {
+						setLeftElement([
+							<motion.div
+								initial={{ opacity: 0.5 }}
+								animate={{ opacity: 1, x: 500 }}
+								transition={{ duration: timeInterval }}
+								className='absolute top-0 left-0'
+								key={newCount}
+							>
+								<Image
+									src={noteToGesture[leftGestures[newCount]]}
+									alt='ASL Gesture'
+									height={100}
+									width={100}
+									className='object-fit max-h-[120px] p-4'
+								/>
+							</motion.div>,
+						]);
+					}
+					if (rightGestures[newCount] != "X") {
+						setRightElement([
+							<motion.div
+								initial={{ opacity: 0.5 }}
+								animate={{ opacity: 1, x: -500 }}
+								transition={{ duration: timeInterval }}
+								className='absolute top-0 right-0'
+								key={newCount}
+							>
+								<Image
+									src={noteToGesture[rightGestures[newCount]]}
+									alt='ASL Gesture'
+									height={100}
+									width={100}
+									className='object-fit max-h-[120px] p-4'
+								/>
+							</motion.div>,
+						]);
+					}
+				}
+				return newCount;
+			});
+		}, timeInterval * 1000);
+
+		return () => clearInterval(gameInterval);
+	}, [timeInterval]);
 
 	return (
 		<motion.div
@@ -206,18 +209,19 @@ export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
 					</div>
 				</div>
 			</div>
-      <h1 className="w-[200px] mx-auto text-center pt-4 text-white">Make the gesture!</h1>
-      <div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify-center flex relative overflow-hidden'>
-        <div className='w-1/2 border-b-4 border-b-white border-r'>
-          <div className='w-1/4 border-b-8 border-b-green-500 h-[120px] ml-auto'></div>
-            {leftElement}
-        </div>
-        <div className='w-1/2 border-b-4 border-b-white border-l'>
-          <div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'></div>
-            {rightElement}
-        </div>
-      </div>
-
+			<h1 className='w-[200px] mx-auto text-center pt-4 text-white'>
+				Make the gesture!
+			</h1>
+			<div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify-center flex relative overflow-hidden'>
+				<div className='w-1/2 border-b-4 border-b-white border-r'>
+					<div className='w-1/4 border-b-8 border-b-green-500 h-[120px] ml-auto'></div>
+					{leftElement}
+				</div>
+				<div className='w-1/2 border-b-4 border-b-white border-l'>
+					<div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'></div>
+					{rightElement}
+				</div>
+			</div>
 		</motion.div>
 	);
 }
