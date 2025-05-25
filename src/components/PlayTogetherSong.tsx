@@ -10,7 +10,12 @@ import Image from "next/image";
 import Camera from "./Camera";
 import { SimplifiedGestures } from "@/utils/gestures";
 
-export default function PlayTogetherSong({ selectedSong, gameScore }) {
+type Props = {
+	selectedSong: string;
+	gameScore: (score: number) => void;
+}
+
+export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
 	const [score, setScore] = useState(0);
 	useState<GestureRecognizer | null>(null);
 	const [gestures, setGestures] = useState<SimplifiedGestures | null>(null);
