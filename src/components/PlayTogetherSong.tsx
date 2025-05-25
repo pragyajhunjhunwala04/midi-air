@@ -8,6 +8,7 @@ import Image from "next/image";
 import Camera from "./Camera";
 import { SimplifiedGestures } from "@/utils/gestures";
 import { loveSong, telepatia, pink, fireworks } from "../data/songSequences";
+import { getNoteFromGestures, playNote } from "@/utils/audio";
 
 type Props = {
 	selectedSong: string;
@@ -37,7 +38,6 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 	const handleGestures = (gestureResult: SimplifiedGestures | null) => {
 		if (!gestureResult) return;
 
-		console.log(gestureResult);
 		setGestures(gestureResult);
 
 		// Do something with the new gestures here
@@ -71,11 +71,11 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 				audio.play();
 				break;
 			case "telepatia":
-				audio = new Audio("/audio/love-story-notes.mp3");
+				audio = new Audio("/audio/telepatia-notes.mp3");
 				setTimeInterval(1.5);
 				setLeftGestures(telepatia.leftSequence);
 				setRightGestures(telepatia.rightSequence);
-				// audio.play();
+				audio.play();
 				break;
 		}
 		audioRef.current = audio;
@@ -125,6 +125,12 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 						);
 					}
 					if (p1_score && p2_score) {
+						const note = getNoteFromGestures(currentGestures);
+						console.log("Gestures:", currentGestures);
+						if (note) {
+							console.log("playing");
+							playNote(note);
+						}
 						setScore((prev) => {
 							scoreRef.current = prev + 1; // update ref too
 							return scoreRef.current;
@@ -178,10 +184,6 @@ export default function PlayTogetherSong({ selectedSong, gameScore }: Props) {
 
 		return () => clearInterval(gameInterval);
 	}, [timeInterval]);
-
-	// useEffect(() => {
-	// 	console.log(gestures);
-	// }, [gestures]);
 
 	return (
 		<motion.div
