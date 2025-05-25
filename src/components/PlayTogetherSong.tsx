@@ -45,7 +45,7 @@ export default function PlayTogetherSong({ selectedSong, gameScore }) {
   const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
   const [count, setCount] = useState(0);
   const [timeInterval, setTimeInterval] = useState(1);
-	const audioRef = useRef<HTMLAudioElement | null>(null);
+
 
   useEffect(() => {
     let audio = null;
