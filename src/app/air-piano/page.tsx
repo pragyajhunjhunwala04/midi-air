@@ -22,8 +22,8 @@ export default function AirPiano() {
 	const noteBufferRef = useRef<string[]>([]);
 	const STABILITY_THRESHOLD = 3; // how many consistent frames needed
 
-	const firstNote = MidiNumbers.fromNote("c1"); // MIDI number for C3
-	const lastNote = MidiNumbers.fromNote("c5"); // MIDI number for F5
+	const firstNote = MidiNumbers.fromNote("c0"); // MIDI number for C3
+	const lastNote = MidiNumbers.fromNote("b6"); // MIDI number for F5
 
 	useEffect(() => {
 		let animationFrameId: number;
