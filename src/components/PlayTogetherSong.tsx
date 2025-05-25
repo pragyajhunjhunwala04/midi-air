@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { JSX, useEffect, useRef, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import {
 	FilesetResolver,
@@ -90,12 +90,17 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
 	}, []);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [leftElement, setLeftElement] = useState<JSX.Element[]>([]);
+  const [rightElement, setRightElement] = useState<JSX.Element[]>([]);
+  const [count, setCount] = useState(0);
+  const [timeInterval, setTimeInterval] = useState(1);
 
   useEffect(() => {
     let audio = null;
     switch(selectedSong) {
       case 'Love Story':
         audio = new Audio('/audio/love-story-notes.mp3');
+        setTimeInterval(2);
         audio.play();
         break;
     }
@@ -103,8 +108,7 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
     audio.onended = () => {
           gameScore(score);
         };
-
-    // Cleanup function to stop audio on unmount
+        
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -112,6 +116,44 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
       }
     };
   }, [selectedSong]);
+
+  useEffect(() => {
+  if (timeInterval !== 2) return; // Only run once set
+
+  const gameInterval = setInterval(() => {
+    setCount(prevCount => {
+      const newCount = prevCount + 1;
+
+      setLeftElement([
+        <motion.div
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1, x: 500 }}
+          transition={{ duration: timeInterval }}
+          className="absolute top-0 left-0"
+          key={newCount}
+        >
+          <Image src="/images/a.svg" alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
+        </motion.div>
+      ]);
+
+      setRightElement([
+        <motion.div
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1, x: -500 }}
+          transition={{ duration: timeInterval }}
+          className="absolute top-0 right-0"
+          key={newCount}
+        >
+          <Image src="/images/b.svg" alt="ASL Gesture" height={100} width={100} className="object-fit max-h-[120px] p-4" />
+        </motion.div>
+      ]);
+
+      return newCount;
+    });
+  }, timeInterval * 1000);
+
+  return () => clearInterval(gameInterval);
+}, [timeInterval]);
 
 	return (
 		<motion.div
@@ -163,18 +205,17 @@ export default function PlayTogetherSong({selectedSong, gameScore}) {
 				</div>
 			</div>
       <h1 className="w-[200px] mx-auto text-center pt-4 text-white">Make the gesture!</h1>
-      <div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify center flex'>
-          <div className='w-1/2 border-b-4 border-b-white border-r'>
-            <div className='w-1/4 border-b-8 border-b-green-500 float-right h-[120px]'>
-                {/* {/* Gesture movement goes here */}
-            </div>
-          </div>
-          <div className='w-1/2 border-b-4 border-b-white border-l'>
-            <div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'>
-                {/* Gesture movement goes here */}
-            </div>
-          </div>
+      <div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify-center flex relative overflow-hidden'>
+        <div className='w-1/2 border-b-4 border-b-white border-r'>
+          <div className='w-1/4 border-b-8 border-b-green-500 h-[120px] ml-auto'></div>
+            {leftElement}
+        </div>
+        <div className='w-1/2 border-b-4 border-b-white border-l'>
+          <div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'></div>
+            {rightElement}
+        </div>
       </div>
+
 		</motion.div>
 	);
 }
