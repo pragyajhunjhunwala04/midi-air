@@ -95,8 +95,6 @@ export default function PlayTogetherSong({ selectedSong, gameScore}: Props) {
   }, [selectedSong]);
 
   useEffect(() => {
-  if (timeInterval !== 2) return; 
-
   const gameInterval = setInterval(() => {
     if (gestures && gestures.left != null && gestures.right != null) {
       let p1_score = gestures.left === leftGestures[count];
