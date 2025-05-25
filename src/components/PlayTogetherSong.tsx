@@ -8,8 +8,11 @@ import {
 } from "@mediapipe/tasks-vision";
 import { motion } from 'framer-motion';
 import "react-piano/dist/styles.css";
+import Image from "next/image";
+import { select } from "motion/react-client";
 
-export default function PlayTogetherSong({selectedSong}) {
+export default function PlayTogetherSong({selectedSong, gameScore}) {
+  const [score, setScore] = useState(0);
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const [gestureRecognizer, setGestureRecognizer] =
 		useState<GestureRecognizer | null>(null);
@@ -86,6 +89,22 @@ export default function PlayTogetherSong({selectedSong}) {
 		};
 	}, []);
 
+  const playBacktrack = () => {
+    const audio = null;
+    switch(selectedSong) {
+      case 'Love Story':
+        const audio = new Audio('/audio/love-story-notes.mp3');
+        audio.onended = () => {
+          gameScore(score);
+        };
+        audio.play();
+    }
+  };
+
+  useEffect(() => {
+    playBacktrack();
+  }, [selectedSong]);
+
 	return (
 		<motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -100,14 +119,16 @@ export default function PlayTogetherSong({selectedSong}) {
 					</h2>
 					{gestureResult?.gestures.length ? (
 						gestureResult.gestures[0].map((g) => (
-							<div key={g.categoryName} className='mb-1'>
-								<strong>{g.categoryName}</strong> - Confidence:{" "}
-								{(g.score * 100).toFixed(1)}%
+							<div key={g.categoryName} className='mb-1 text-5xl'>
+								<strong>{g.categoryName}</strong>
 							</div>
 						))
 					) : (
 						<p>No Gestures Detected</p>
 					)}
+          <div className="h-[250px] w-[150px]">
+            <Image src="/images/p1_idle.gif" alt="my gif" height={500} width={500} className="object-cover min-h-[250px] min-w-[160px]"/>
+          </div>
 				</div>
 				<video
 					id='video'
@@ -116,22 +137,37 @@ export default function PlayTogetherSong({selectedSong}) {
 					muted
 					playsInline
 				/>
-				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'>
+				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75 text-right'>
 					<h2 className='text-lg font-semibold mb-2'>
 						Player 2
 					</h2>
 					{gestureResult?.gestures.length ? (
 						gestureResult.gestures[0].map((g) => (
-							<div key={g.categoryName} className='mb-1'>
-								<strong>{g.categoryName}</strong> - Confidence:{" "}
-								{(g.score * 100).toFixed(1)}%
+							<div key={g.categoryName} className='mb-1 text-5xl'>
+								<strong>{g.categoryName}</strong>
 							</div>
 						))
 					) : (
 						<p>No gestures detected.</p>
 					)}
+          <div className="relative bottom-0 h-[200px]">
+            <Image src="/images/p2_idle.gif" alt="my gif" height={500} width={500} />
+          </div>
 				</div>
 			</div>
+      <h1 className="w-[200px] mx-auto text-center pt-4 text-white">Make the gesture!</h1>
+      <div className='mt-4 p-4 w-[1200px] h-[150px] text-white rounded-xl justify center flex'>
+          <div className='w-1/2 border-b-4 border-b-white border-r'>
+            <div className='w-1/4 border-b-8 border-b-green-500 float-right h-[120px]'>
+
+            </div>
+          </div>
+          <div className='w-1/2 border-b-4 border-b-white border-l'>
+            <div className='w-1/4 border-b-8 border-b-green-500 h-[120px]'>
+
+            </div>
+          </div>
+      </div>
 		</motion.div>
 	);
 }
