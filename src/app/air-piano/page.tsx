@@ -53,7 +53,7 @@ export default function AirPiano() {
 	};
 
 	return (
-		<div className='flex flex-col items-center m-auto'>
+		<div className='flex flex-col items-center justify-center'>
 			<div className='flex flex-3'>
 				<div className='h-[480px] w-[200px] border border-white/20 bg-white bg-opacity-10 py-8 px-4 rounded-xl mx-4 text-md text-opacity-75'></div>
 				<Camera onGesturesDetected={handleGestures} />
